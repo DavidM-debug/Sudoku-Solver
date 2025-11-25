@@ -36,7 +36,6 @@ function solve_sudoku_board(sudoku_board, i, j) {
      :param j: the columns in the sudoku board(starting from 0)
      :return: true when the sudoku board is solved
      */
-
     //checks if the sudoku board is completed
     if (i == 8 && j == 9) { return true; }
 
@@ -53,6 +52,7 @@ function solve_sudoku_board(sudoku_board, i, j) {
     for (let x = 1; x < 10; x++) {
         if (valid_numbers_check(sudoku_board, i, j, x, false)) {
             sudoku_board[i][j] = x
+            
             if (solve_sudoku_board(sudoku_board, i, j + 1)) {
                 return true;
             }
@@ -76,44 +76,61 @@ function check_rules(sudoku_board, i, j) {
     return false
 }
 
-function show_sudoku_board(sudoku_board) {
+function show_sudoku_board(sudoku_board, sudoku_cell) {
     /*
         Function prints the sudoku board without a grid format
         :param sudoku_board: the board
         :return: nothing
     */
-    let l = sudoku_board.length
-    let l1 = sudoku_board[0].length
-    for (let i = 0; i < l; i++) {
-        for (let j = 0; j < l1; j++) {
-            if (j != l1 - 1) {
-                console.log(sudoku_board[i][j]," ")
-            } else {
-                console.log(sudoku_board[i][j])
-            }
+    for (let i = 0; i < sudoku_board.length; i++) {
+        for (let j = 0; j < sudoku_board[i].length; j++) {
+            sudoku_cell[i][j].value = sudoku_board[i][j];
         }
     }
 }
 
-sudoku = [[0, 0, 0, 0, 0, 0, 0, 0, 0],
-[0, 0, 0, 0, 0, 0, 0, 0, 0],
-[0, 0, 0, 0, 0, 0, 0, 0, 0],
-[0, 0, 0, 0, 0, 0, 0, 0, 0],
-[0, 0, 0, 0, 0, 0, 0, 0, 0],
-[0, 0, 0, 0, 0, 0, 0, 0, 0],
-[0, 0, 0, 0, 0, 0, 0, 0, 0],
-[0, 0, 0, 0, 0, 0, 0, 0, 0],
-[0, 0, 0, 0, 0, 0, 0, 0, 0]];
-
-console.log("anything")
-
-if (solve_sudoku_board(sudoku, 0, 0)) {
-    show_sudoku_board(sudoku)
-    if (check_rules(sudoku, 0, 0)) {
-        show_sudoku_board(sudoku)
-    } else {
-        console.log("el sudoku introduit no es valid")
+function create_sudoku_board(sudoku_board) {
+    const sudoku_arr = []
+    const sudoku_container = document.getElementById("sudoku-container")
+    for (let i = 0; i < sudoku_board.length; i++) {
+        sudoku_arr.push([])
+        for (let j = 0; j < sudoku_board[i].length; j++) {
+            const cell = document.createElement("input");
+            cell.value = sudoku_board[i][j];
+            cell.type = "number";
+            sudoku_container.appendChild(cell);
+            sudoku_arr[i].push(cell)
+        }
     }
+    return sudoku_arr
+}
+function make_empty_sudoku_board() {
+    sudoku = [
+        [0, 0, 0, 0, 0, 0, 0, 0, 0],
+        [0, 0, 0, 0, 0, 0, 0, 0, 0],
+        [0, 0, 0, 0, 0, 0, 0, 0, 0],
+        [0, 0, 0, 0, 0, 0, 0, 0, 0],
+        [0, 0, 0, 0, 0, 0, 0, 0, 0],
+        [0, 0, 0, 0, 0, 0, 0, 0, 0],
+        [0, 0, 0, 0, 0, 0, 0, 0, 0],
+        [0, 0, 0, 0, 0, 0, 0, 0, 0],
+        [0, 0, 0, 0, 0, 0, 0, 0, 0]
+    ];
+    return sudoku
+}
 
-} else { console.log("No hi ha solució") }
-show_sudoku_board(sudoku)
+const sud = create_sudoku_board(make_empty_sudoku_board())
+
+const solve_sudokuB = document.getElementById("solve-sudoku")
+console.log(solve_sudokuB)
+    solve_sudokuB.addEventListener("click", () => {
+    if (solve_sudoku_board(sudoku, 0, 0)) {
+
+        show_sudoku_board(sudoku, sud)
+    }
+})
+
+document.getElementById("reset-sudoku").addEventListener("click", () => {
+    sudoku = make_empty_sudoku_board()
+    show_sudoku_board(sudoku, sud)
+})
