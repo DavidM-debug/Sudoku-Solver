@@ -122,7 +122,6 @@ function create_ext_sudoku_board(int_sudoku_board) {
                         int_sudoku_board[i][j] = val;
                     }
                 }
-                console.log(int_sudoku_board);
             });
             sudoku_container.appendChild(cell);
             sudoku_arr[i].push(cell)
@@ -160,11 +159,8 @@ const ext_sudoku = create_ext_sudoku_board(internal_sudoku)
 //creates an event listener for the solve sudoku button, when clicked it solves the sudoku and shows the solved sudoku on the board
 const solve_sudokuB = document.getElementById("solve-sudoku")
     solve_sudokuB.addEventListener("click", () => {
-        console.log("this defenetly should work")
         if(check_rules(internal_sudoku, 0, 0)){
-            console.log("this should work right")
             if (solve_sudoku(internal_sudoku, 0, 0)) {
-                console.log("this should work")
                 show_sudoku(internal_sudoku, ext_sudoku)
             }
         }else{
